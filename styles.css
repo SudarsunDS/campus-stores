@@ -38,6 +38,13 @@ body > main {
   --mark: light-dark(#bd502f, #f2a585);
   --ok: light-dark(#e3f1e8, #2d4838);
   --oktxt: light-dark(#25523d, #bedac8);
+  --info: light-dark(#e6eef5, #22364a);
+  --infotxt: light-dark(#1f4566, #bcd4ee);
+  --warn: light-dark(#fff1d6, #45391f);
+  --warntxt: light-dark(#6c4709, #f0d39a);
+  --bad: light-dark(#fbe6e1, #4a2a24);
+  --badtxt: light-dark(#8a2a15, #f7bcab);
+  --badline: light-dark(#c4553a, #e98d74);
   background: var(--paper);
   color: var(--ink);
   font:
@@ -194,7 +201,7 @@ body > main {
 }
 #campus-stores .shell {
   display: grid;
-  grid-template-columns: 155px minmax(0, 1fr);
+  grid-template-columns: 170px minmax(0, 1fr);
   min-height: 315px;
 }
 #campus-stores nav {
@@ -208,13 +215,14 @@ body > main {
 #campus-stores nav button {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 8px;
   text-align: left;
   border: 1px solid transparent;
   background: transparent;
   font-weight: 500;
 }
-#campus-stores nav button[aria-pressed="true"] {
+#campus-stores nav button[aria-current="page"] {
   background: var(--sel);
   color: var(--inv);
 }
@@ -323,6 +331,545 @@ body > main {
   font-size: 12px;
   background: transparent;
 }
+/* ---------- Request lifecycle additions ---------- */
+#campus-stores .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+#campus-stores [tabindex="-1"]:focus {
+  outline: none;
+}
+#campus-stores button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+#campus-stores button svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+#campus-stores .ghost {
+  background: transparent;
+}
+#campus-stores nav .count {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--mark);
+  color: var(--inv);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+#campus-stores nav button[aria-current="page"] .count {
+  background: var(--inv);
+  color: var(--sel);
+}
+#campus-stores h4 {
+  margin: 0;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#campus-stores .subhead {
+  margin: 20px 0 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--quiet);
+}
+#campus-stores .sectionhead.sub {
+  margin: 20px 0 6px;
+  align-items: flex-end;
+}
+#campus-stores .sectionhead .buttons {
+  margin: 0;
+}
+#campus-stores .crumbs {
+  margin: -4px 0 8px -8px;
+}
+#campus-stores .crumbs button {
+  border-color: transparent;
+  color: var(--quiet);
+}
+#campus-stores .empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--quiet);
+  padding: 14px 0;
+}
+#campus-stores .empty svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Status chips: text always carries the meaning; colour reinforces it. */
+#campus-stores .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: var(--desk);
+  color: var(--quiet);
+  border: 1px solid transparent;
+}
+#campus-stores .chip svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.5;
+}
+#campus-stores .chip-shelf,
+#campus-stores .chip-complete {
+  background: var(--ok);
+  color: var(--oktxt);
+}
+#campus-stores .chip-out,
+#campus-stores .chip-ready {
+  background: var(--info);
+  color: var(--infotxt);
+}
+#campus-stores .chip-due,
+#campus-stores .chip-partial {
+  background: var(--warn);
+  color: var(--warntxt);
+}
+#campus-stores .chip-overdue {
+  background: var(--bad);
+  color: var(--badtxt);
+}
+#campus-stores .chip-link {
+  background: transparent;
+  border-color: var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Slip cards */
+#campus-stores .slip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 14px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 14px;
+  margin-top: 8px;
+  background: var(--paper);
+}
+#campus-stores .slip.is-out {
+  border-left-color: var(--infotxt);
+}
+#campus-stores .slip.is-due {
+  border-left-color: var(--warntxt);
+}
+#campus-stores .slip.is-overdue {
+  border-left-color: var(--badline);
+}
+#campus-stores .slip.is-returned,
+#campus-stores .slip.is-ready {
+  background: var(--desk);
+}
+#campus-stores .slip.is-checking {
+  border-color: var(--sel);
+  box-shadow: 0 0 0 1px var(--sel);
+}
+#campus-stores .sliptitle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+#campus-stores .slipbody > small {
+  display: block;
+  margin-top: 1px;
+}
+#campus-stores .custody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+  margin: 8px 0 0;
+}
+#campus-stores .custody dt {
+  font-size: 11px;
+  color: var(--quiet);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+#campus-stores .custody dd {
+  margin: 0;
+  font-size: 13px;
+}
+#campus-stores .custody dd.strong {
+  font-weight: 650;
+}
+#campus-stores .record .custody {
+  margin-top: 6px;
+}
+#campus-stores .custodyline {
+  display: block;
+  color: var(--infotxt) !important;
+  font-weight: 600;
+}
+#campus-stores .inlineform {
+  grid-column: 1 / -1;
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+}
+
+/* Forms */
+#campus-stores .panel {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--desk);
+  padding: 14px 16px;
+  margin: 10px 0 14px;
+}
+#campus-stores .panel > h3 {
+  margin-bottom: 6px;
+}
+#campus-stores .formhint {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--quiet);
+  font-size: 13px;
+  margin: 4px 0 8px;
+}
+#campus-stores .formhint svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+#campus-stores .field {
+  display: grid;
+  gap: 3px;
+  align-content: start;
+  min-width: 0;
+}
+#campus-stores .field > label {
+  font-size: 13px;
+  font-weight: 600;
+}
+#campus-stores .field :is(select, input, textarea) {
+  width: 100%;
+}
+#campus-stores .hint {
+  color: var(--quiet);
+  font-size: 12px;
+}
+#campus-stores .tag-input {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+#campus-stores :is(select, input:not([type="radio"], [type="checkbox"]), textarea)[aria-invalid="true"] {
+  border-color: var(--badline);
+  box-shadow: 0 0 0 1px var(--badline);
+}
+#campus-stores .fielderror {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  color: var(--badtxt);
+  font-size: 12.5px;
+  font-weight: 600;
+  margin: 2px 0 0;
+}
+#campus-stores .fielderror svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+#campus-stores .errorsummary {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--bad);
+  color: var(--badtxt);
+  border-left: 4px solid var(--badline);
+  border-radius: 6px;
+  padding: 9px 12px;
+  margin: 6px 0 10px;
+}
+#campus-stores .errorsummary svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+#campus-stores .formactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+#campus-stores fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+#campus-stores legend {
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+#campus-stores .kitline {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.8fr) minmax(0, 1.2fr);
+  gap: 6px 14px;
+  align-items: start;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+}
+#campus-stores .kitunit {
+  display: grid;
+  gap: 3px;
+}
+#campus-stores .kitunit select {
+  width: 100%;
+}
+#campus-stores .check {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  font-size: 14px;
+  padding-top: 6px;
+  cursor: pointer;
+}
+#campus-stores .check small {
+  display: block;
+}
+#campus-stores input[type="checkbox"],
+#campus-stores input[type="radio"] {
+  width: 17px;
+  height: 17px;
+  margin: 2px 0 0;
+  accent-color: var(--sel);
+  flex-shrink: 0;
+}
+#campus-stores .returnline {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  padding: 10px 12px 12px;
+  margin: 8px 0;
+}
+#campus-stores .returnline.has-error {
+  border-color: var(--badline);
+}
+#campus-stores .returnline legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 8px;
+}
+#campus-stores .returnline legend small {
+  display: block;
+  font-weight: 400;
+}
+#campus-stores .segmented {
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#campus-stores .seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 11px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--paper);
+}
+#campus-stores .returnline.has-error .seg:not(:has(input:checked)) {
+  border-color: var(--badline);
+}
+#campus-stores .seg:has(input:checked) {
+  border-color: var(--sel);
+  box-shadow: inset 0 0 0 1px var(--sel);
+}
+#campus-stores .seg:has(input:focus-visible) {
+  outline: 3px solid var(--mark);
+  outline-offset: 2px;
+}
+#campus-stores .when-back,
+#campus-stores .when-out {
+  display: none;
+  margin-bottom: 0;
+}
+#campus-stores .returnline:has(input[value="back"]:checked) .when-back,
+#campus-stores .returnline:has(input[value="out"]:checked) .when-out {
+  display: grid;
+}
+@supports not selector(:has(*)) {
+  #campus-stores .when-back,
+  #campus-stores .when-out {
+    display: grid;
+  }
+}
+
+/* Counter */
+#campus-stores .lookup {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+#campus-stores .lookup label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 650;
+}
+#campus-stores .lookup label svg {
+  width: 16px;
+  height: 16px;
+}
+#campus-stores .lookup input {
+  font-size: 16px;
+  padding: 10px 12px;
+  border-width: 2px;
+  border-radius: 8px;
+}
+#campus-stores .resultcount {
+  font-weight: 600;
+  margin: 8px 0 0;
+}
+#campus-stores .resultcount:empty {
+  display: none;
+}
+#campus-stores .stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+#campus-stores .stat {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: grid;
+}
+#campus-stores .stat strong {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+#campus-stores .stat.bad {
+  background: var(--bad);
+  color: var(--badtxt);
+  border-color: var(--badline);
+}
+#campus-stores .stat.warn {
+  background: var(--warn);
+  color: var(--warntxt);
+}
+#campus-stores .stat.bad small,
+#campus-stores .stat.warn small {
+  color: inherit;
+}
+#campus-stores .group {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+#campus-stores .grouphead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+#campus-stores .grouphead small {
+  display: block;
+  margin-top: 2px;
+}
+#campus-stores .handnote {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: var(--memo);
+  color: var(--memotxt);
+  border-radius: 8px;
+  padding: 8px 11px;
+  margin: 8px 0 2px;
+  font-size: 13px;
+}
+#campus-stores .handnote svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Requests */
+#campus-stores .joblist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#campus-stores .jobrow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 14px;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding: 11px 0;
+}
+#campus-stores .jobrow small {
+  display: block;
+}
+#campus-stores .jobsum {
+  color: var(--ink) !important;
+}
+#campus-stores .jobright {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#campus-stores .entry-auto {
+  border-left-color: var(--infotxt);
+}
+#campus-stores .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+#campus-stores label.inline {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+#campus-stores .statusbar .undo {
+  border-color: var(--sel);
+  color: var(--sel);
+  font-weight: 700;
+}
+
 @container (max-width:650px) {
   #campus-stores .shell {
     grid-template-columns: minmax(0, 1fr);
@@ -352,9 +899,43 @@ body > main {
     padding: 9px 12px;
   }
 }
+@container (max-width:650px) {
+  #campus-stores .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #campus-stores .kitline {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #campus-stores .check {
+    padding-top: 0;
+  }
+  #campus-stores nav .count {
+    margin-left: 2px;
+  }
+}
 @container (max-width:420px) {
   #campus-stores .form {
     grid-template-columns: minmax(0, 1fr);
+  }
+  #campus-stores .slip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #campus-stores .slipact button {
+    width: 100%;
+  }
+  #campus-stores .jobrow,
+  #campus-stores .grouphead {
+    grid-template-columns: minmax(0, 1fr);
+    flex-direction: column;
+  }
+  #campus-stores .jobright {
+    justify-content: space-between;
+  }
+  #campus-stores .custody {
+    gap: 4px 16px;
+  }
+  #campus-stores .formactions button {
+    flex: 1 1 auto;
   }
   #campus-stores .brandmark {
     display: none;
@@ -365,7 +946,9 @@ body > main {
 }
 @media (pointer: coarse) {
   #campus-stores button,
-  #campus-stores select {
+  #campus-stores select,
+  #campus-stores input:not([type="checkbox"], [type="radio"]),
+  #campus-stores .seg {
     min-height: 44px;
   }
 }
